@@ -11,11 +11,13 @@ class estudiante(models.Model):
     Apellido=models.CharField(max_length=50)
     Email=models.EmailField()
 
-class profesor(models.Model):
+class Profesor(models.Model):
     Nombre=models.CharField(max_length=50)
     Apellido=models.CharField(max_length=50)
     Email=models.EmailField()
     Profesion=models.CharField(max_length=50)
+    def __str__(self):
+     return f'{self.Nombre} {self.Apellido} --{self.Profesion}'
 
 class entregables(models.Model):
     Nombre=models.CharField(max_length=50)
@@ -25,4 +27,6 @@ class entregables(models.Model):
 class curso(models.Model):
     Nombre=models.CharField(max_length=50)
     Comision=models.IntegerField()
+    def __str__(self):
+     return f"{self.Nombre}"
 

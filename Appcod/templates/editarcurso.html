@@ -1,0 +1,16 @@
+{% extends "padre.html" %}
+{% load static %}
+
+{% block loQcambiaDeltitulo %}
+<h1> Editando curso </h1>
+{% endblock %}
+
+{% block contenidoQueCambia %}
+
+<form action="{% url 'EditarCurso' curso.id %}" method="POST">{% csrf_token %}
+<table> 
+    {{ form.as_table }}
+</table>
+    <input type="submit" value="Confirmar cambios">
+</form>
+{% endblock %}

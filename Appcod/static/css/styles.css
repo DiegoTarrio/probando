@@ -2990,7 +2990,27 @@ textarea.form-control-lg {
 .input-group .form-select.is-invalid:focus {
   z-index: 3;
 }
-
+.perso{
+padding: 50px;
+position: relative;
+margin: auto;
+width: 1000px;
+height: 400px;
+}
+aside#izq{
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 200px;
+  height: 198px;
+}
+aside#der{
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 200px;
+  height: 198px;
+}
 .btn {
   display: inline-block;
   font-weight: 400;
@@ -11303,7 +11323,8 @@ textarea.form-control-lg {
 header.masthead {
   position: relative;
   background-color: #343a40;
-  background: url("../assets/img/bg-masthead.jpg") no-repeat center center;
+  background: url("../assets/img/fondopaginaweb1.jpg") no-repeat center center;
+  padding-top: 8rem;
   background-size: cover;
   padding-top: 8rem;
   padding-bottom: 8rem;

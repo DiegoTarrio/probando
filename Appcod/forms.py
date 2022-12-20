@@ -9,3 +9,8 @@ class ProfeForm(forms.Form):
     apellido= forms.CharField(label="Apellido Profesor", max_length=50)
     email= forms.EmailField(label="Email Profesor")
     profesion= forms.CharField(label="Profesion Profesor", max_length=50)
+
+class EstudianteForm(forms.Form):
+    Nombre= forms.CharField(max_length=50)
+    Apellido= forms.CharField(max_length=50)
+    Email= forms.EmailField()

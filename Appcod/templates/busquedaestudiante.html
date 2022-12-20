@@ -1,0 +1,28 @@
+{% extends "padre.html" %}
+
+{% load static %}
+
+{% block titulo %}
+<h1 class="mb-5">resultados de la busqueda de cursos</h1>
+{% endblock %}
+
+{% block contenidoQueCambia %}
+
+{% if estudiantes %}
+
+<h2>LISTADO DE ESTUDIANTES</h2>
+{% for curso in estudiantes %}
+
+<h3>{{ curso.Nombre }} - {{ curso.Apellido }}</h3>
+
+{% endfor %}
+
+{% else %}
+
+<h2>NO HAY ESTUDIANTES</h2>
+
+{% endif %}
+
+
+
+{% endblock %}

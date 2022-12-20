@@ -1,7 +1,7 @@
 from django.shortcuts import render
-from .models import curso,familiar,Profesor
+from .models import curso,familiar,Profesor, Estudiante
 from django.http import HttpResponse
-from .forms import CursoFormulario, ProfeForm
+from .forms import CursoFormulario, ProfeForm, EstudianteForm
 # Create your views here.
 
 def cursito(request):
@@ -26,7 +26,8 @@ def inicio(request):
 def profesores(request):
     return render(request,'profesores.html')
 def estudiantes(request):
-    return render(request,'estudiantes.html')
+    estudiante= Estudiante.objects.all()
+    return render(request,'estudiantes.html', {"estudiantes":estudiante})
 def cursos(request):
     return render(request,'cursos.html')
 def entregables(request):
@@ -84,13 +85,13 @@ def profeFormulario(request):
         return render(request,'profeformulario.html', {'form':formulario})
 
 def busquedaComision(request):
-    return render(request, "AppCoder/busquedaComision.html")
+    return render(request, "busquedacomision.html")
 
 def buscar(request):
     
     comision= request.GET["Comision"]
     if comision!="":
-        cursos= curso.objects.filter(comision__icontains=comision)#buscar otros filtros en la documentacion de django
+        cursos= curso.objects.filter(Comision__icontains=comision)#buscar otros filtros en la documentacion de django
         return render(request, "resultadosBusqueda.html", {"cursos": cursos})
     else:
         return render(request, "busquedaComision.html", {"mensaje": "Che Ingresa una comision para buscar!"})
@@ -153,3 +154,65 @@ def editarcurso(request, id):
     return render(request,'editarcurso.html',{"form":formulario, "curso":cursito})
 
 
+def eliminarestudiante(request, id):
+    estudiante=Estudiante.objects.get(id=id)
+    estudiante.delete()
+    estudiante=Estudiante.objects.all()
+    return render(request,'estudiantes.html', {"estudiantes":estudiante})
+
+def editarestudiante(request, id):
+    estudiante=Estudiante.objects.get(id=id)
+    if request.method== 'POST':
+        form=EstudianteForm(request.POST)
+        if form.is_valid():
+           info=form.cleaned_data
+           estudiante.Nombre=info['Nombre']
+           estudiante.Apellido=info['Apellido']
+           estudiante.Email=info['Email']
+           estudiante.save()
+           estudiante=Estudiante.objects.all()
+           return render(request, 'estudiantes.html', {'estudiantes':estudiante})
+
+        pass
+    else:
+        form=EstudianteForm(initial={'Nombre':estudiante.Nombre, 'Apellido':estudiante.Apellido, 'Email':estudiante.Email})
+        return render(request,'editarestudiante.html', {'form': form, "estudiante":estudiante})
+
+def estudianteformulario(request):
+    if request.method=="POST":
+        form=EstudianteForm(request.POST)
+        if form.is_valid():
+            info=form.cleaned_data
+            nombre=info['Nombre']
+            apellido=info['Apellido']
+            email=info['Email']
+            estudiante=Estudiante(Nombre=nombre, Apellido=apellido, Email=email)
+            estudiante.save()
+            estudiantes=Estudiante.objects.all()
+            return render(request, 'estudiantes.html', {'estudiantes':estudiantes})
+        
+    else:
+        form=EstudianteForm()
+        return render(request, 'estudianteformulario.html', {"form":form})
+
+#../assets/img/bg-masthead.jpg
+
+
+def buscarestudiante(request):
+    
+    nombre= request.GET["nombre"]
+    if nombre!="":
+        estudiante= Estudiante.objects.filter(Nombre__icontains=nombre)#buscar otros filtros en la documentacion de django
+        return render(request, "busquedaestudiante.html", {"estudiantes": estudiante})
+    else:
+        return render(request, "estudiantes.html", {"mensaje": "Che Ingresa una comision para buscar!"})
+
+
+def buscarprofesor(request):
+    
+    nombre= request.GET["nombre"]
+    if nombre!="":
+        profesor= Profesor.objects.filter(Nombre__icontains=nombre)#buscar otros filtros en la documentacion de django
+        return render(request, "busquedaprofesor.html", {"profesores": profesor})
+    else:
+        return render(request, "profesores.html", {"mensaje": "Che Ingresa una comision para buscar!"})

@@ -3,3 +3,29 @@
 {% block loQcambiaDeltitulo %}
 <h1> Bienvenidos a la seccion de Estudiantes </h1>
 {% endblock %}
+
+{% block contenidoQueCambia %}
+
+<ul>
+    <h1> Listado de estudiantes </h1>
+    {% for estudiante in estudiantes %}
+    <li> {{ estudiante.Nombre }} - {{ estudiante.Apellido }}</li>
+    <a class="btn btn-danger" href="{% url 'EliminarEstudiante' estudiante.id %}">Eliminar</a>
+    <a class="btn btn-success " href="{% url 'EditarEstudiante' estudiante.id %}">Editar</a>
+    {% endfor %}
+</ul>
+<a class="btn btn-primary" href="{% url 'EstudianteFormulario' %}">Agregar estudiante</a>
+
+{% endblock %}
+
+{% block contenidoQueCambia0 %}
+<aside id="izq">
+<ul>
+    <form action="{% url 'buscarEstudiante' %}", method="GET">
+       
+        <input id="nombre" type="text" name="nombre" placeholder="Ingrese un nombre">
+
+        <input type="submit" value="Buscar">
+    </form>
+</ul>
+{% endblock %}

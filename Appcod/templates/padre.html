@@ -28,7 +28,7 @@
             </div>
         </nav>
         <!-- Masthead-->
-        <header class="masthead">
+        <header class="masthead" style="background: url(../static/assets/img/fondopaginaweb1.jpg) no-repeat center center ;">
             <div class="container position-relative">
                 <div class="row justify-content-center">
                     <div class="col-xl-6">
@@ -47,14 +47,7 @@
                             <!-- to get an API token!-->
                             <form class="form-subscribe" id="contactForm" data-sb-form-api-token="API_TOKEN">
                                 <!-- Email address input-->
-                                <div class="row">
-                                    <div class="col">
-                                        <input class="form-control form-control-lg" id="emailAddress" type="email" placeholder="Email Address" data-sb-validations="required,email" />
-                                        <div class="invalid-feedback text-white" data-sb-feedback="emailAddress:required">Email Address is required.</div>
-                                        <div class="invalid-feedback text-white" data-sb-feedback="emailAddress:email">Email Address Email is not valid.</div>
-                                    </div>
-                                    <div class="col-auto"><button class="btn btn-primary btn-lg disabled" id="submitButton" type="submit">Submit</button></div>
-                                </div>
+                                
                                 <!-- Submit success message-->
                                 <!---->
                                 <!-- This is what your users will see when the form-->
@@ -78,9 +71,11 @@
             </div>
         </header>
         <!-- Icons Grid-->
-        {% block contenidoQueCambia %}
-
-        {% endblock %}
+        <div class="perso" style="height:1000px; width: 965px;"> 
+            <aside id="izq" style="width: 400px; height: 1000px; position:absolute;background:pink">{% block contenidoQueCambia %} {% endblock %}</aside>
+            <aside id="der" style="width: 400px; height: 1000px; position:absolute; right: 0;">{% block contenidoQueCambia0 %} {% endblock %}</aside>
+     
+        </div>
         <section class="features-icons bg-light text-center">
             <div class="container">
                 <div class="row">

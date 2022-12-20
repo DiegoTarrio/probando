@@ -1,0 +1,17 @@
+{% extends 'padre.html' %}
+{% load static %}
+
+{% block loQcambiaDeltitulo %}
+<h1> Bienvenidos a la seccion de estudiante </h1>
+{% endblock %}
+
+{% block contenidoQueCambia %}
+<ul>
+    <form action="{% url 'EditarEstudiante' estudiante.id %}" method="POST"> {% csrf_token %}
+    <table>
+        {{ form.as_table }}
+    </table>
+    <input type="submit" value="Confirmar cambios">
+</form>
+</ul>
+{% endblock %}

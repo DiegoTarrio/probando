@@ -6,10 +6,12 @@ class familiar(models.Model):
     Nacimiento=models.DateField()
     Edad=models.IntegerField()
     
-class estudiante(models.Model):
+class Estudiante(models.Model):
     Nombre=models.CharField(max_length=50)
     Apellido=models.CharField(max_length=50)
     Email=models.EmailField()
+    def __str__(self):
+     return f'{self.Nombre} {self.Apellido}'
 
 class Profesor(models.Model):
     Nombre=models.CharField(max_length=50)
@@ -19,7 +21,7 @@ class Profesor(models.Model):
     def __str__(self):
      return f'{self.Nombre} {self.Apellido} --{self.Profesion}'
 
-class entregables(models.Model):
+class Entregables(models.Model):
     Nombre=models.CharField(max_length=50)
     fecha_entrega=models.DateField()
     Entregado=models.BooleanField()

@@ -1,0 +1,3 @@
+las funcionalidades estan explicitas en la pagina web, desde ahi se puede borrar, editar, agregar y buscar datos en la BBD
+todas hacen un recorrido de url, ya se por un metodo GET apretando en editar o borrar, o un metodo POST cuando se confirma el formulario de edicion y los datos a cambiar, o mismo en el boton de buscar cuando se le indica en el formulario.\
+sea por un metodo o otro esto se dirige a una view encargada de detallar que realizar paso a paso, algunas como la indicacion de borrar o editar, reciben un id como parametro para indicar donde se efectuaran los cambios en la BDD 

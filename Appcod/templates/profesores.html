@@ -21,3 +21,15 @@
 <h2>{{ mensaje }}</h2>
 <a class="btn btn-primary" href="{% url 'profeFormulario'  %}">Agregar Profesor</a>
 {% endblock %}
+
+{% block contenidoQueCambia0 %}
+<aside id="izq">
+<ul>
+    <form action="{% url 'buscarProfesores' %}", method="GET">
+       
+        <input id="nombre" type="text" name="nombre" placeholder="Ingrese un nombre">
+
+        <input type="submit" value="Buscar">
+    </form>
+</ul>
+{% endblock %}

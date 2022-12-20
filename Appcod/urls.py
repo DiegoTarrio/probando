@@ -19,8 +19,16 @@ urlpatterns = [
     path("leerProfesores/", leerProfesores, name="leerProfesores"),
     path("eliminarProfesor/<id>", eliminarProfesor, name="eliminarProfesor"),
     path("editarProfesor/<id>", editarProfesor, name="editarProfesor"),
+    path('buscarprofesores/', buscarprofesor, name="buscarProfesores"),
 
     path('leercursos/',leercursos, name="LeerCursos"),
     path('eliminarcurso/<id>', eliminarcurso, name="EliminarCurso"),
     path('editarcurso/<id>', editarcurso, name="EditarCurso"),
+
+    path('eliminarestudiante/<id>',eliminarestudiante, name='EliminarEstudiante'),
+    path('editarestudiante/<id>', editarestudiante, name='EditarEstudiante'),
+    path('estudianteformulario/', estudianteformulario, name="EstudianteFormulario"),
+    path('buscarestudiante/', buscarestudiante, name='buscarEstudiante'),
+
+    
 ]

@@ -2,5 +2,28 @@
 {% load static %}
 {% block loQcambiaDeltitulo %}
 <h1> Bienvenidos al aula virtual </h1>
+{{ mensaje }}
 {% endblock %}
+
+{% block contenidoQueCambia %} 
+<ul>
+    <h1>Listado de blogs</h1>
+    {% for blog in blogs %}
+    <h1> {{ blog.Titulo }} </h1>
+        
+    <h2>   {{ blog.Subtitulo }}</h2>
+        
+    <h4>   {{ blog.Resu }}</h4>
+
+    <img src="C:\Users\abril\PaginaWeb\probando\media\blog\2021-09-09.png" alt="">
+
+    <a class="btn btn-primary" href="">Leer mas</a>
+
+
+    
+
+
+{% endfor %}
+{% endblock %}
+
 

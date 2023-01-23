@@ -1,0 +1,21 @@
+{% extends 'padre.html' %}
+{% load static %}
+
+{% block loQcambiaDeltitulo %}
+{% endblock %}
+
+{% block contenidoQueCambia %}
+
+{{ mensaje }}
+<ul>
+    <form action="{% url 'Login' %}" method="POST">{% csrf_token %}
+
+        <table>
+        {{ form.as_table }}
+    </table>
+
+
+        <input type="submit" value="Iniciar Sesion">
+    </form>
+</ul>
+{% endblock %}

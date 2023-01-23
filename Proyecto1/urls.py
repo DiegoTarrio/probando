@@ -17,6 +17,8 @@ from django.contrib import admin
 from django.urls import path,include
 from Proyecto1.views import *
 from Appcod.views import curso,familiares,inicio
+from django.conf import settings
+from django.conf.urls.static import static
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('saludar/', saludar),
@@ -25,4 +27,8 @@ urlpatterns = [
     path('anionacimiento/<edad>',calcular_edad),
     path('probandohtml/',probandohtml),
     path('Appcod/', include("Appcod.urls")),
+    path('AppMensajeria/', include("AppMensajeria.urls")),
 ]
+
+urlpatterns+=static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+

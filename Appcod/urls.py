@@ -30,5 +30,13 @@ urlpatterns = [
     path('estudianteformulario/', estudianteformulario, name="EstudianteFormulario"),
     path('buscarestudiante/', buscarestudiante, name='buscarEstudiante'),
 
+    path('register/',register,name='Register'),
+    path('login/',login_request,name='Login'),
+    path('logout/', LogoutView.as_view(), name='Logout'),
+    path('editarPerfil/', editarPerfil, name='editarPerfil'),
+    path('agregaravatar/',agregaravatar,name='agregarAvatar'),
+    path('agregarblog/',agregarblog,name='agregarBlog'),
+    
+
     
 ]

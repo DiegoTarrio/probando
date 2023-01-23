@@ -1,8 +1,20 @@
 from django.shortcuts import render
-from .models import curso,familiar,Profesor, Estudiante
+from .models import curso,familiar,Profesor, Estudiante, Avatar, Blog #ImagenBlog
 from django.http import HttpResponse
-from .forms import CursoFormulario, ProfeForm, EstudianteForm
+from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
+from django.contrib.auth import authenticate, login
+from .forms import CursoFormulario, ProfeForm, EstudianteForm,RegiterUsuarioForm,UserEditForm, AvatarForm,BlogForm, FotoBlogForm
+from django.contrib.auth.decorators import login_required 
+from django.contrib.auth.views import LogoutView
 # Create your views here.
+
+def obtenerAvatar(request):
+    lista=Avatar.objects.filter(user=request.user)
+    if len(lista)!=0:
+        avatar=lista[0].imagen.url
+    else:
+        avatar=""
+    return avatar
 
 def cursito(request):
     cursito1=curso(Nombre="python", Comision=34645)
@@ -22,19 +34,25 @@ def familiares(request):
     return render(request,"familiar.html",{"Familiares": lista_familiares})
     
 def inicio(request):
-    return render(request,"index.html")
+    blogs=Blog.objects.all()
+    return render(request,"index.html",{'blogs':blogs})
+@login_required
 def profesores(request):
-    return render(request,'profesores.html')
+    blogs=Blog.objects.all()
+    return render(request,'profesores.html', {'blogs':blogs})
+@login_required    
 def estudiantes(request):
-    estudiante= Estudiante.objects.all()
-    return render(request,'estudiantes.html', {"estudiantes":estudiante})
+    estudiante= Estudiante.objects.all()   
+    return render(request,'estudiantes.html', {"estudiantes":estudiante, 'avatar':obtenerAvatar(request)})
+@login_required    
 def cursos(request):
     return render(request,'cursos.html')
+@login_required    
 def entregables(request):
     return render(request,'entregables.html')
 def padre(request):
     return render(request,'padre.html')
-
+@login_required
 def cursoformulario(request):
     if request.method == 'POST':
         miFormulario=CursoFormulario(request.POST) #llega toda la informacion del html
@@ -63,6 +81,7 @@ def cursoformulario(request):
     else:
         respuesta='no enviaste datos'
         HttpResponse(respuesta)
+@login_required        
 def profeFormulario(request):
     if request.method=="POST":
         form= ProfeForm(request.POST)
@@ -86,7 +105,7 @@ def profeFormulario(request):
 
 def busquedaComision(request):
     return render(request, "busquedacomision.html")
-
+@login_required
 def buscar(request):
     
     comision= request.GET["Comision"]
@@ -101,7 +120,7 @@ def leerProfesores(request):
     profesores=Profesor.objects.all()
     return render(request, "profesores.html", {"profesores": profesores})
 
-
+@login_required
 def eliminarProfesor(request, id):
     profesor=Profesor.objects.get(id=id)
     print(profesor)
@@ -109,7 +128,7 @@ def eliminarProfesor(request, id):
     profesores=Profesor.objects.all()
     return render(request, "profesores.html", {"profesores": profesores, "mensaje": "Profesor eliminado correctamente"})
 
-
+@login_required
 def editarProfesor(request, id):
     profesor=Profesor.objects.get(id=id)
     if request.method=="POST":
@@ -216,3 +235,145 @@ def buscarprofesor(request):
         return render(request, "busquedaprofesor.html", {"profesores": profesor})
     else:
         return render(request, "profesores.html", {"mensaje": "Che Ingresa una comision para buscar!"})
+
+#def mostrarblog(request):
+ #   blogs=blog.objects.all()
+  #  return render(request,'blog.html',{'blogs':blogs})
+
+def register(request):
+    if request.method=="POST":
+        form=RegiterUsuarioForm(request.POST)
+        if form.is_valid():
+            username=form.cleaned_data.get("username")
+            form.save()
+            return render(request,'index.html',{'mensaje':'Usuario creado correctamente'})
+
+        else:
+            return render(request,'register.html',{'form':form, 'mensaje':"error al crear el usuario"})
+
+    else:
+        form=RegiterUsuarioForm()
+        return render(request,'register.html',{'form':form})
+
+'''
+def login_request(request):
+    if request.method=='POST':
+        form=AuthenticationForm(request.POST)
+        if form.is_valid():
+            info=form.cleaned_data
+            usu=info['username']
+            clave=info['password']
+            usuario=authenticate(username=usu, password=clave) #verifica si el usuario existe
+            if usuario is not None:
+                login(request,usuario)
+                return render(request,'index.html', {'mensaje':'Usuario {usu} logueado correctamente'})
+            else:
+                return render(request, 'login.html',{'form':form ,'mensaje':'Usuario o Contrasenia incorrectoss'})
+        else:
+            return render(request, 'login.html',{'form':form ,'mensaje':'Usuario o Contrasenia incorrectos'})
+            
+
+    else:
+        form=AuthenticationForm()
+        return render(request,'login.html',{'form':form}) '''
+
+def login_request(request):
+    if request.method=="POST":
+        form=AuthenticationForm(request, data=request.POST)
+        if form.is_valid():
+            info=form.cleaned_data
+            usu=info["username"]
+            clave=info["password"]
+            usuario=authenticate(username=usu, password=clave)#verifica si el usuario existe, si existe, lo devuelve, y si no devuelve None 
+            if usuario is not None:
+                login(request, usuario)
+                return render(request, "index.html", {"mensaje":f"Usuario {usu} logueado correctamente"})
+            else:
+                return render(request, "login.html", {"form": form, "mensaje":"Usuario o contraseña incorrectos"})
+        else:
+            return render(request, "login.html", {"form": form, "mensaje":"Usuario o contraseña incorrectos"})
+    else:
+        form=AuthenticationForm()
+        return render(request, "login.html", {"form": form})
+
+@login_required
+def editarPerfil(request):
+    usuario=request.user
+
+    if request.method=="POST":
+        form=UserEditForm(request.POST)
+        if form.is_valid():
+            info=form.cleaned_data
+            usuario.email=info["email"]
+            usuario.password1=info["password1"]
+            usuario.password2=info["password2"]
+            usuario.first_name=info["first_name"]
+            usuario.last_name=info["last_name"]
+            usuario.save()
+            return render(request, "index.html", {"mensaje":f"Usuario {usuario.username} editado correctamente"})
+        else:
+            return render(request, "editarperfil.html", {"form": form, "nombreusuario":usuario.username})
+    else:
+        
+        form=UserEditForm(initial={'email':usuario.email,'first_name':usuario.first_name, 'last_name':usuario.last_name})
+        return render(request, "editarperfil.html", {"form": form, "nombreusuario":usuario.username})
+
+def agregaravatar(request):
+    if request.method=="POST":
+        form=AvatarForm(request.POST,request.FILES)
+        if form.is_valid():
+            avatar=Avatar(user=request.user, imagen=request.FILES["imagen"])
+            avatarViejo=Avatar.objects.filter(user=request.user)
+            if len(avatarViejo)>0:
+                avatarViejo[0].delete()
+            avatar.save()
+            return render(request,'index.html',{'mensaje':'avatar agregado correctamente'})
+        else:
+            return render(request,'agregaravatar.html',{'form':form, 'mensaje':'algo fallo' })
+    else:
+        form=AvatarForm()
+        return render(request,'agregaravatar.html',{'form':form, 'usuario':request.user})
+
+def agregarblog(request):
+    if request.method == 'POST':
+        form=BlogForm(request.POST,request.FILES)
+        if form.is_valid():
+            Titulo=form.cleaned_data.get('Titulo')
+            Subtitulo=form.cleaned_data.get('Subtitulo')
+            Resu=form.cleaned_data.get('Resu')
+            Cuerpo=form.cleaned_data.get('Cuerpo')
+            Autor=form.cleaned_data.get('Autor')
+            Fecha=form.cleaned_data.get('Fecha')
+            Imagen=request.FILES['Imagen']
+            print(Titulo,Subtitulo,Resu,Cuerpo,Autor,Fecha,Imagen)
+            blog=Blog(Titulo=Titulo, Subtitulo=Subtitulo, Resu=Resu, Cuerpo=Cuerpo, Autor=Autor, Fecha=Fecha, Imagen=Imagen)
+            blog.save()
+            blogs=Blog.objects.all()
+
+            #blog=Blog(Titulo=info['Titulo'],Subtitulo=info['Subtitulo'],Resu=info['Resu'],Cuerpo=info['Cuerpo'],Autor=request.user,Fecha=info['Fecha'])
+        
+            return render(request,'index.html',{'blogs':blogs})
+        else:
+            return render(request,'agregarblog.html', {'form':form,'mensaje':'ha ocurrido un error'})
+    else:
+        form=BlogForm()
+        return render(request,'agregarblog.html',{'form':form})
+
+def fotoblog(request):
+    if request.method=="POST":
+        form=FotoBlogForm(request.POST,request.FILES)
+        if form.is_valid():
+            avatar=ImagenBlog(blog=request.blog, imagen=request.FILES["imagen"])
+            avatarViejo=ImagenBlog.objects.filter(Blog=request.blog)
+            if len(avatarViejo)>0:
+                avatarViejo[0].delete()
+            avatar.save()
+            return render(request,'index.html',{'mensaje':'avatar agregado correctamente'})
+        else:
+            return render(request,'agregarblog.html',{'forms':form, 'mensaje':'algo fallo' })
+    else:
+        return FotoBlogForm()
+
+
+        
+

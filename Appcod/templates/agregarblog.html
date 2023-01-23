@@ -1,0 +1,32 @@
+{% extends "padre.html" %}
+
+{% load static %}
+
+{% block loQcambiaDeltitulo %}
+<h1 class="mb-5">AGREGAR BLOG, USUARIO: {{ nombreusuario }} </h1>
+{% endblock %}
+
+{% block contenidoQueCambia %}
+
+<h3>{{ mensaje }}</h3>
+
+<form action="{% url 'agregarBlog'  %}" method="POST" enctype="multipart/form-data"> {% csrf_token %}
+
+    <table>
+    
+        {{ form.as_table }}
+    
+    </table>
+    <table>
+    
+        {{ forms.as_table }}
+    
+    </table>
+    
+    <input type="submit" value="AGREGAR BLOG">
+    
+    
+    </form>
+
+
+{% endblock %}
